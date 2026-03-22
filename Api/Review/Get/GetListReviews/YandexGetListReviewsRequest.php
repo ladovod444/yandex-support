@@ -74,6 +74,56 @@ final class YandexGetListReviewsRequest extends YandexMarket
         return $this;
     }
 
+    /**
+     * Возвращает все отзывы о товарах продавца по указанным фильтрам.
+     * Результаты возвращаются постранично, одна страница содержит не более 20 отзывов.
+     * Отзывы расположены в порядке публикации, поэтому вы можете передавать определенный
+     * идентификатор страницы в page_token, если вы получали его ранее.
+     *
+     * @see https://yandex.ru/dev/market/partner-api/doc/ru/reference/goods-feedback/getGoodsFeedbacks
+     *
+     * @return Generator<YandexReviewDTO>
+     */
+    public function findAll(): Generator
+    {
+
+        $response = $this->TokenHttpClient()
+            ->request(
+                'POST',
+                sprintf('/businesses/%s/goods-feedback', $this->getBusiness()),
+                [
+                    'query' => $this->query(),
+                    'json' => $this->body(),
+                ],
+            );
+
+        $content = $response->toArray(false);
+
+        if($response->getStatusCode() !== 200)
+        {
+            foreach($content['errors'] as $error)
+            {
+                $this->logger->critical(
+                    sprintf(
+                        'Ошибка получения отзывов. code: %s, message: %s',
+                        $error['code'],
+                        $error['message'],
+                    ),
+                    [self::class.':'.__LINE__, $this->body()],
+                );
+            }
+
+            return false;
+
+        }
+
+
+        foreach($content['result']['feedbacks'] as $item)
+        {
+            yield new YandexReviewDTO($item);
+        }
+    }
+
     /** return query parameters */
     private function query(): array
     {
@@ -129,55 +179,5 @@ final class YandexGetListReviewsRequest extends YandexMarket
             "paid" => false,
 
         ];
-    }
-
-    /**
-     * Возвращает все отзывы о товарах продавца по указанным фильтрам.
-     * Результаты возвращаются постранично, одна страница содержит не более 20 отзывов.
-     * Отзывы расположены в порядке публикации, поэтому вы можете передавать определенный
-     * идентификатор страницы в page_token, если вы получали его ранее.
-     *
-     * @see https://yandex.ru/dev/market/partner-api/doc/ru/reference/goods-feedback/getGoodsFeedbacks
-     *
-     * @return Generator<YandexReviewDTO>
-     */
-    public function findAll(): Generator
-    {
-
-        $response = $this->TokenHttpClient()
-            ->request(
-                'POST',
-                sprintf('/businesses/%s/goods-feedback', $this->getBusiness()),
-                [
-                    'query' => $this->query(),
-                    'json' => $this->body()
-                ]
-            );
-
-        $content = $response->toArray(false);
-
-        if($response->getStatusCode() !== 200)
-        {
-            foreach($content['errors'] as $error)
-            {
-                $this->logger->critical(
-                    sprintf(
-                        'Ошибка получения отзывов. code: %s, message: %s',
-                        $error['code'],
-                        $error['message']
-                    ),
-                    [self::class.':'.__LINE__, $this->body()]
-                );
-            }
-
-            return false;
-
-        }
-
-
-        foreach($content['result']['feedbacks'] as $item)
-        {
-            yield new YandexReviewDTO($item);
-        }
     }
 }

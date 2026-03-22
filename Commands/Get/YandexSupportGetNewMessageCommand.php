@@ -76,7 +76,7 @@ class YandexSupportGetNewMessageCommand extends Command
         $question = new ChoiceQuestion(
             question: 'Профиль пользователя',
             choices: $questions,
-            default: 0
+            default: 0,
         );
 
         $profileName = $helper->ask($input, $output, $question);

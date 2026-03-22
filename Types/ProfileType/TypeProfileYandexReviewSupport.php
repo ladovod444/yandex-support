@@ -33,17 +33,6 @@ final class TypeProfileYandexReviewSupport implements TypeProfileInterface
 {
     public const string TYPE = '4f2be139-3379-7c81-876c-2b38e6ae93be';
 
-    public function __toString(): string
-    {
-        return self::TYPE;
-    }
-
-    /** Возвращает значение (value) */
-    public function getValue(): string
-    {
-        return self::TYPE;
-    }
-
     /** Сортировка */
     public static function priority(): int
     {
@@ -53,5 +42,16 @@ final class TypeProfileYandexReviewSupport implements TypeProfileInterface
     public static function equals(mixed $uid): bool
     {
         return self::TYPE === (string) $uid;
+    }
+
+    public function __toString(): string
+    {
+        return self::TYPE;
+    }
+
+    /** Возвращает значение (value) */
+    public function getValue(): string
+    {
+        return self::TYPE;
     }
 }

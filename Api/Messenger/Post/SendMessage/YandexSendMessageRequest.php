@@ -51,23 +51,6 @@ final class YandexSendMessageRequest extends YandexMarket
         return $this;
     }
 
-    /** Возвращает массив с query параметрами */
-    private function query(): array
-    {
-        return [
-            'chatId' => $this->yandexChat,
-        ];
-    }
-
-    /** Возвращает массив с body */
-    private function body(): array
-    {
-        return [
-            'message' => $this->message,
-        ];
-    }
-
-
     /**
      * Отправляет сообщение в чат с покупателем.
      *
@@ -116,5 +99,21 @@ final class YandexSendMessageRequest extends YandexMarket
         }
 
         return true;
+    }
+
+    /** Возвращает массив с query параметрами */
+    private function query(): array
+    {
+        return [
+            'chatId' => $this->yandexChat,
+        ];
+    }
+
+    /** Возвращает массив с body */
+    private function body(): array
+    {
+        return [
+            'message' => $this->message,
+        ];
     }
 }

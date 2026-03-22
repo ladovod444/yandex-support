@@ -42,20 +42,6 @@ final class YandexGetCommentsRequest extends YandexMarket
         return $this;
     }
 
-    /** return query parameters */
-    private function query(): array
-    {
-        return [
-
-            /** Идентификатор страницы c результатами.*/
-            // 'page_token' => 'nextPageToken'
-            /** Количество значений на одной странице. */
-            // 'limit' => 20 // максимальное значение 20
-
-        ];
-    }
-
-
     /**
      * Возвращает комментарии к отзыву.
      *
@@ -99,5 +85,18 @@ final class YandexGetCommentsRequest extends YandexMarket
         {
             yield new YandexCommentsDTO($item);
         }
+    }
+
+    /** return query parameters */
+    private function query(): array
+    {
+        return [
+
+            /** Идентификатор страницы c результатами.*/
+            // 'page_token' => 'nextPageToken'
+            /** Количество значений на одной странице. */
+            // 'limit' => 20 // максимальное значение 20
+
+        ];
     }
 }

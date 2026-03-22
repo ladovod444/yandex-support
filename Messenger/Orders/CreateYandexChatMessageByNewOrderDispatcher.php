@@ -74,18 +74,6 @@ final readonly class CreateYandexChatMessageByNewOrderDispatcher
 
     public function __invoke(OrderMessage $message): void
     {
-        /** Не отправляем сообщение дважды */
-        $Deduplicator = $this->deduplicator
-            ->namespace('orders-order')
-            ->deduplication([
-                (string) $message->getId(),
-                self::class,
-            ]);
-
-        if($Deduplicator->isExecuted())
-        {
-            return;
-        }
 
         $OrderEvent = $this->orderEventRepository
             ->find($message->getEvent());
@@ -94,6 +82,20 @@ final readonly class CreateYandexChatMessageByNewOrderDispatcher
         {
             return;
         }
+
+        /** Не отправляем сообщение дважды */
+        $Deduplicator = $this->deduplicator
+            ->namespace('orders-order')
+            ->deduplication([
+                (string) $OrderEvent->getOrderNumber(),
+                self::class,
+            ]);
+
+        if($Deduplicator->isExecuted())
+        {
+            return;
+        }
+
 
         if(false === $OrderEvent->isDeliveryTypeEquals(TypeDeliveryFbsYaMarket::TYPE))
         {

@@ -95,16 +95,25 @@ final  class YandexReviewDTO
         return !empty($data['identifiers']) ?
             sprintf(
                 '<span class="badge text-bg-%s align-middle">',
-                $this->color($data['statistics']['rating'])
+                $this->color($data['statistics']['rating']),
             ).
             sprintf(
                 '%s</span><span>&nbsp;Заказ: #%s</span> ', $data['statistics']['rating'],
-                $data['identifiers']['orderId']
+                $data['identifiers']['orderId'],
             )
             : null;
 
     }
 
+    private function color(int $rating): string
+    {
+        return match ($rating)
+        {
+            1, 2 => 'danger',
+            3, 4 => 'warning',
+            default => 'success'
+        };
+    }
 
     /** Метод формирует текст сообщения */
     private function text(array $description, array $media = []): string
@@ -125,7 +134,7 @@ final  class YandexReviewDTO
             foreach($media['photos'] as $photo)
             {
                 $result[] = sprintf(
-                    '<img src="%s" width="300"/>', $photo
+                    '<img src="%s" width="300"/>', $photo,
                 );
             }
 
@@ -139,7 +148,7 @@ final  class YandexReviewDTO
             {
                 $result[] = sprintf(
                     '<a href="%s">Видео</a>',
-                    $video
+                    $video,
                 );
             }
 
@@ -147,16 +156,6 @@ final  class YandexReviewDTO
 
 
         return !empty($result) ? $text.' '.implode(' ', $result) : trim($text);
-    }
-
-    private function color(int $rating): string
-    {
-        return match ($rating)
-        {
-            1, 2 => 'danger',
-            3, 4 => 'warning',
-            default => 'success'
-        };
     }
 
     public function getReviewId(): int

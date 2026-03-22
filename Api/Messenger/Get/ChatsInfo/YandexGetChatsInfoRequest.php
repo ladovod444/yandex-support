@@ -38,7 +38,7 @@ final class YandexGetChatsInfoRequest extends YandexMarket
     /** Фильтр по типам чатов. */
     private array $types = [
         'CHAT',         // чат с покупателем.
-        'ARBITRAGE'     // спор
+        'ARBITRAGE',     // спор
     ];
 
     /** Фильтр по типам чатов. Тип чата: */
@@ -65,29 +65,6 @@ final class YandexGetChatsInfoRequest extends YandexMarket
         return $this;
     }
 
-    /** Возвращает массив с query параметрами */
-    private function query(): array
-    {
-        return [
-
-            /** Идентификатор страницы c результатами.*/
-            // 'page_token' => 'nextPageToken'
-
-            /** Количество значений на одной странице. */
-            // 'limit' => 50
-
-        ];
-    }
-
-    /** Возвращает массив с body */
-    private function body(): array
-    {
-        return [
-            "types" => $this->types,
-            "statuses" => $this->statuses
-        ];
-    }
-
     /**
      * Возвращает ваши чаты с покупателями.
      *
@@ -104,7 +81,7 @@ final class YandexGetChatsInfoRequest extends YandexMarket
                 sprintf('/businesses/%s/chats', $this->getBusiness()),
                 [
                     'query' => $this->query(),
-                    'json' => $this->body()
+                    'json' => $this->body(),
                 ],
 
             );
@@ -127,5 +104,28 @@ final class YandexGetChatsInfoRequest extends YandexMarket
         {
             yield new YandexChatsDTO($item);
         }
+    }
+
+    /** Возвращает массив с query параметрами */
+    private function query(): array
+    {
+        return [
+
+            /** Идентификатор страницы c результатами.*/
+            // 'page_token' => 'nextPageToken'
+
+            /** Количество значений на одной странице. */
+            // 'limit' => 50
+
+        ];
+    }
+
+    /** Возвращает массив с body */
+    private function body(): array
+    {
+        return [
+            "types" => $this->types,
+            "statuses" => $this->statuses,
+        ];
     }
 }

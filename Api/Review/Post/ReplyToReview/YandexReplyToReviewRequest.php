@@ -55,20 +55,6 @@ final class YandexReplyToReviewRequest extends YandexMarket
         return $this;
     }
 
-    /** Возвращает массив с body */
-    private function body(): array
-    {
-        return [
-            "feedbackId" => $this->feedback,
-            "comment" => [
-                //                "id" => 0,        // Идентификатор комментария, который нужно изменить.
-                //                "parentId" => 0, // Идентификатор родительского комментария, на который нужно ответить.
-                "text" => $this->message,
-            ],
-        ];
-    }
-
-
     /**
      * Добавляет новый комментарий магазина или изменяет комментарий, который магазин оставлял ранее.
      *
@@ -118,5 +104,18 @@ final class YandexReplyToReviewRequest extends YandexMarket
         }
 
         return true;
+    }
+
+    /** Возвращает массив с body */
+    private function body(): array
+    {
+        return [
+            "feedbackId" => $this->feedback,
+            "comment" => [
+                //                "id" => 0,        // Идентификатор комментария, который нужно изменить.
+                //                "parentId" => 0, // Идентификатор родительского комментария, на который нужно ответить.
+                "text" => $this->message,
+            ],
+        ];
     }
 }

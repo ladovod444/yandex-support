@@ -41,25 +41,6 @@ final class YandexGetListMessagesRequest extends YandexMarket
         return $this;
     }
 
-
-    /** Возвращает массив с query параметрами */
-    private function query(): array
-    {
-        return [
-            /**
-             * Идентификатор страницы c результатами.
-             * Example: eyBuZXh0SWQ6IDIzNDIgfQ==
-             */
-            // 'page_token' => 'nextPageToken'
-
-            /** Количество значений на одной странице. */
-            // 'limit' => 50,
-
-            /** Идентификатор чата. */
-            'chatId' => $this->chatId
-        ];
-    }
-
     /**
      * Возвращает ваши чаты с покупателями.
      *
@@ -77,9 +58,9 @@ final class YandexGetListMessagesRequest extends YandexMarket
                 [
                     'query' => $this->query(),
                     'json' => [
-                        'messageIdFrom' => 1    // Идентификатор сообщения, начиная с которого
+                        'messageIdFrom' => 1,    // Идентификатор сообщения, начиная с которого
                         // нужно получить все последующие сообщения.
-                    ]
+                    ],
                 ],
 
             );
@@ -92,7 +73,7 @@ final class YandexGetListMessagesRequest extends YandexMarket
             foreach($content['errors'] as $error)
                 $this->logger->critical(
                     sprintf('yandex-support:%s, %s', $error['code'], $error['message']),
-                    [self::class.':'.__LINE__, 'chatId' => $this->chatId]
+                    [self::class.':'.__LINE__, 'chatId' => $this->chatId],
                 );
 
             return false;
@@ -103,5 +84,23 @@ final class YandexGetListMessagesRequest extends YandexMarket
         {
             yield new YandexListMessagesDTO(($content['result']['context']['orderId'] ?? null), $item);
         }
+    }
+
+    /** Возвращает массив с query параметрами */
+    private function query(): array
+    {
+        return [
+            /**
+             * Идентификатор страницы c результатами.
+             * Example: eyBuZXh0SWQ6IDIzNDIgfQ==
+             */
+            // 'page_token' => 'nextPageToken'
+
+            /** Количество значений на одной странице. */
+            // 'limit' => 50,
+
+            /** Идентификатор чата. */
+            'chatId' => $this->chatId,
+        ];
     }
 }

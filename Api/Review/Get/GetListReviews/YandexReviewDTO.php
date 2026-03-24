@@ -27,7 +27,7 @@ namespace BaksDev\Yandex\Support\Api\Review\Get\GetListReviews;
 
 use DateTimeImmutable;
 
-final  class YandexReviewDTO
+final class YandexReviewDTO
 {
 
     /** Идентификатор отзыва. */
@@ -65,6 +65,10 @@ final  class YandexReviewDTO
     private int $rating;
 
 
+    /** Идентификатор товара. */
+    private string $offerId;
+
+
     public function __construct(array $data)
     {
 
@@ -85,8 +89,14 @@ final  class YandexReviewDTO
 
         $this->rating = $data['statistics']['rating'];
 
+        /* OfferId */
+        $this->offerId = !empty($data['identifiers']) ?
+            $data['identifiers']['offerId']
+            : null;
+
 
     }
+
 
     /** Метод формирует тему сообщения */
     public function title(array $data): ?string
@@ -192,4 +202,10 @@ final  class YandexReviewDTO
     {
         return $this->rating;
     }
+
+    public function getOfferId(): string
+    {
+        return $this->offerId;
+    }
+
 }

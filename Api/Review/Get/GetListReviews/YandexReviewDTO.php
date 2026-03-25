@@ -66,7 +66,7 @@ final class YandexReviewDTO
 
 
     /** Идентификатор товара. */
-    private string $offerId;
+    private string $article;
 
 
     public function __construct(array $data)
@@ -89,8 +89,8 @@ final class YandexReviewDTO
 
         $this->rating = $data['statistics']['rating'];
 
-        /* OfferId */
-        $this->offerId = !empty($data['identifiers']) ?
+        /* article */
+        $this->article = !empty($data['identifiers']) ?
             $data['identifiers']['offerId']
             : null;
 
@@ -203,9 +203,9 @@ final class YandexReviewDTO
         return $this->rating;
     }
 
-    public function getOfferId(): string
+    public function getArticle(): string
     {
-        return $this->offerId;
+        return $this->article;
     }
 
 }

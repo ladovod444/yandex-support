@@ -34,6 +34,7 @@ use BaksDev\Orders\Order\Type\Status\OrderStatus\Collection\OrderStatusNew;
 use BaksDev\Products\Product\Repository\ProductDetail\ProductDetailByEventInterface;
 use BaksDev\Products\Product\Repository\ProductDetail\ProductDetailByEventResult;
 use BaksDev\Support\Entity\Support;
+use BaksDev\Support\Repository\ExistTicket\ExistSupportTicketInterface;
 use BaksDev\Support\Type\Priority\SupportPriority;
 use BaksDev\Support\Type\Priority\SupportPriority\Collection\SupportPriorityLow;
 use BaksDev\Support\Type\Status\SupportStatus;
@@ -62,10 +63,11 @@ use Twig\Environment;
 final readonly class CreateYandexChatMessageByNewOrderDispatcher
 {
     public function __construct(
-        private OrderEventInterface $orderEventRepository,
         #[Target('ozonSupportLogger')] private LoggerInterface $logger,
+        private OrderEventInterface $orderEventRepository,
         private DeduplicatorInterface $deduplicator,
         private CreateYaMarketChatRequest $CreateYaMarketChatRequest,
+        private ExistSupportTicketInterface $ExistSupportTicket,
         private SupportHandler $SupportHandler,
         private ProductDetailByEventInterface $ProductDetailByEventRepository,
         private Environment $environment
@@ -96,10 +98,11 @@ final readonly class CreateYandexChatMessageByNewOrderDispatcher
             return;
         }
 
+        $Deduplicator->save();
+
 
         if(false === $OrderEvent->isDeliveryTypeEquals(TypeDeliveryFbsYaMarket::TYPE))
         {
-            $Deduplicator->save();
             return;
         }
 
@@ -126,6 +129,13 @@ final readonly class CreateYandexChatMessageByNewOrderDispatcher
             ->create();
 
         if(is_bool($chatId))
+        {
+            $Deduplicator->delete();
+
+            return;
+        }
+
+        if($this->ExistSupportTicket->ticket($chatId)->exist())
         {
             return;
         }
@@ -280,9 +290,7 @@ final readonly class CreateYandexChatMessageByNewOrderDispatcher
                 ],
             );
 
-            return;
+            $Deduplicator->delete();
         }
-
-        $Deduplicator->save();
     }
 }

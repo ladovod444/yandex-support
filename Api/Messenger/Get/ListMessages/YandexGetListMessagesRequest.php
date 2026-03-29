@@ -27,8 +27,9 @@ namespace BaksDev\Yandex\Support\Api\Messenger\Get\ListMessages;
 
 use BaksDev\Yandex\Market\Api\YandexMarket;
 use Generator;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
-
+#[Autoconfigure(shared: false)]
 final class YandexGetListMessagesRequest extends YandexMarket
 {
     /** Идентификатор чата */

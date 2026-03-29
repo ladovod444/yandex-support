@@ -26,7 +26,9 @@ declare(strict_types=1);
 namespace BaksDev\Yandex\Support\Api\Questions\Post\SendQuestion;
 
 use BaksDev\Yandex\Market\Api\YandexMarket;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
+#[Autoconfigure(shared: false)]
 final class YandexSendQuestionRequest extends YandexMarket
 {
     /** Идентификатор вопроса. */

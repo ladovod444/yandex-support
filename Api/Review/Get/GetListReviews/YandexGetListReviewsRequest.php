@@ -30,7 +30,7 @@ use DateTimeImmutable;
 use Generator;
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
-// #[Autoconfigure(public: true)]
+#[Autoconfigure(shared: false)]
 final class YandexGetListReviewsRequest extends YandexMarket
 {
     /**

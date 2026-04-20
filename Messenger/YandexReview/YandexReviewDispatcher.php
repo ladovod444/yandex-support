@@ -66,8 +66,8 @@ final readonly class YandexReviewDispatcher
         private ProductEventByArticleInterface $eventByArticleRepository,
         private DeduplicatorInterface $deduplicator,
         private UserByUserProfileInterface $userByUserProfile,
-        #[Autowire(env: 'PROJECT_USER')] private string|null $projectUser = null,
         private RandomUserProfileByProjectUserInterface $profileByProjectUser,
+        #[Autowire(env: 'PROJECT_USER')] private string|null $projectUser = null,
     ) {}
 
     public function __invoke(YandexReviewMessage $message): void

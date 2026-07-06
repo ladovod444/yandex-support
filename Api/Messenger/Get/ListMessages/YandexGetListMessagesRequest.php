@@ -72,10 +72,12 @@ final class YandexGetListMessagesRequest extends YandexMarket
         {
 
             foreach($content['errors'] as $error)
+            {
                 $this->logger->critical(
                     sprintf('yandex-support:%s, %s', $error['code'], $error['message']),
                     [self::class.':'.__LINE__, 'chatId' => $this->chatId],
                 );
+            }
 
             return false;
         }
